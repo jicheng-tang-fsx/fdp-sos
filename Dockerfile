@@ -13,4 +13,8 @@ ENV PATH="${INSTALL_PATH}/bin:${PATH}"
 RUN echo "miniconda installed"
 
 WORKDIR /app
-CMD [ "/bin/bash" ]
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+COPY ./*.py ./
+
+CMD exec uvicorn api:app --host 0.0.0.0 --port 8000 >> /app/logs/fdp_sos_$(date +%Y%m%d).log 2>&1
