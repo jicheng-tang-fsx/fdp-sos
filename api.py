@@ -14,6 +14,10 @@ async def read_config():
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+@app.post("/api/error")
+async def error():
+    singleton.logger.error("/api/error error")
+    raise HTTPException(status_code=500, detail=str("hello"))
 
 @app.post("/api/disconnet")
 async def disconnet():
@@ -34,6 +38,6 @@ if __name__ == "__main__":
     singleton.logger.info("FDP-SOS is starting up")
     singleton.logger.info(f"application config: {singleton.config}")
     from uvicorn.config import LOGGING_CONFIG
-    LOGGING_CONFIG["formatters"]["default"]["fmt"] = '%(asctime)s    %(levelname)s:    %(message)s'
-    LOGGING_CONFIG["formatters"]["access"]["fmt"] = '%(asctime)s    %(levelname)s:    %(client_addr)s - "%(request_line)s" %(status_code)s'
+    LOGGING_CONFIG["formatters"]["default"]["fmt"] = '%(asctime)s    %(levelprefix)s %(message)s'
+    LOGGING_CONFIG["formatters"]["access"]["fmt"] = '%(asctime)s    %(levelprefix)s %(client_addr)s - "%(request_line)s" %(status_code)s'
     uvicorn.run("api:app", host="0.0.0.0", port=singleton.config["api"]["port"], log_config=LOGGING_CONFIG)
