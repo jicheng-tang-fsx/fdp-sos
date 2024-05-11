@@ -1,16 +1,15 @@
 from fastapi import FastAPI, HTTPException
-import os, tomllib
 from datetime import datetime
+import singleton
+
 
 app = FastAPI()
+singleton.logger.info('FDP-SOS is starting up')
 
 @app.get("/api/config")
 async def read_config():
-    config_path = "/app/config.toml"
     try:
-        with open(config_path, 'rb') as config_file:
-            config = tomllib.load(config_file)
-        return config
+        return singleton.config
     except FileNotFoundError:
         raise HTTPException(status_code=404, detail="Config file not found")
     except Exception as e:
