@@ -1,5 +1,6 @@
-[test1]
-server = "192.168.1.1"
-ports = [8001, 8001, 8002]
-connection_max = 5000
-enabled = true
+[api]
+port = 8000
+
+[session]
+server = "TODO"
+ports = 12345
