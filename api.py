@@ -15,18 +15,18 @@ async def read_config():
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@app.get("/")
-async def read_root():
+@app.post("/api/disconnet")
+async def disconnet():
     return {"message": "Welcome to the FastAPI application!"}
 
 
-@app.get("/add/")
-async def add(a: int, b: int):
+@app.post("/api/cancelorder")
+async def cancel_order(a: int, b: int):
     return {"result": a + b}
 
 
-@app.get("/time/")
-async def get_time():
+@app.post("/api/canceltrade")
+async def cancel_trade():
     return {"time": datetime.now().isoformat()}
 
 
@@ -34,5 +34,6 @@ if __name__ == "__main__":
     singleton.logger.info("FDP-SOS is starting up")
     singleton.logger.info(f"application config: {singleton.config}")
     from uvicorn.config import LOGGING_CONFIG
-    LOGGING_CONFIG["formatters"]["default"]["fmt"] = "%(asctime)s    %(levelname)s:    %(message)s"
+    LOGGING_CONFIG["formatters"]["default"]["fmt"] = '%(asctime)s    %(levelname)s:    %(message)s'
+    LOGGING_CONFIG["formatters"]["access"]["fmt"] = '%(asctime)s    %(levelname)s:    %(client_addr)s - "%(request_line)s" %(status_code)s'
     uvicorn.run("api:app", host="0.0.0.0", port=singleton.config["api"]["port"], log_config=LOGGING_CONFIG)
